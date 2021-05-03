@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "548404815573",
+    "project_id": "mixroid-minigames",
+    "storage_bucket": "mixroid-minigames.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548404815573:android:664683856089c04912245c",
+        "android_client_info": {
+          "package_name": "com.example.mixroidminigames"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548404815573-0f0lvvvr3h5ablvfualg1s29dakki4r1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mixroidminigames",
+            "certificate_hash": "f359bf404472a8a3fec9fdc3ecb86bd29c5fc183"
+          }
+        },
+        {
+          "client_id": "548404815573-nmcmqihietkm5ofpbsvhskc5jcnc7d93.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMLqheo9V_Lce6eYY6rBmdN79wBJjihX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548404815573-nmcmqihietkm5ofpbsvhskc5jcnc7d93.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
