@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "548404815573",
-    "project_id": "mixroid-minigames",
-    "storage_bucket": "mixroid-minigames.appspot.com"
+    "project_number": "216198400318",
+    "project_id": "milk-delivery-36088",
+    "storage_bucket": "milk-delivery-36088.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:548404815573:android:664683856089c04912245c",
+        "mobilesdk_app_id": "1:216198400318:android:c9e2a4a98c75f071c7046f",
         "android_client_info": {
           "package_name": "com.example.mixroidminigames"
         }
       },
       "oauth_client": [
         {
-          "client_id": "548404815573-0f0lvvvr3h5ablvfualg1s29dakki4r1.apps.googleusercontent.com",
+          "client_id": "216198400318-m8u2opd6ef6j3ulrpuqr705k597be4o6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.mixroidminigames",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "548404815573-nmcmqihietkm5ofpbsvhskc5jcnc7d93.apps.googleusercontent.com",
+          "client_id": "216198400318-2s8efo4jhhm1js2njoim598ldeccpjt3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCMLqheo9V_Lce6eYY6rBmdN79wBJjihX4"
+          "current_key": "AIzaSyBsOGyQckYYjNp7F3pZwD5O_YHb_ravPbk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "548404815573-nmcmqihietkm5ofpbsvhskc5jcnc7d93.apps.googleusercontent.com",
+              "client_id": "216198400318-2s8efo4jhhm1js2njoim598ldeccpjt3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
