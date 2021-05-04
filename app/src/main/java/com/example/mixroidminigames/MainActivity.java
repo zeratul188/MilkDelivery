@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mixroidminigames.ui.PasswordEditActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -120,6 +121,22 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
+                    }
+                });
+
+                btnEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, ProfileEditActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+                btnPasswordChange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, PasswordEditActivity.class);
+                        startActivity(intent);
                     }
                 });
 
