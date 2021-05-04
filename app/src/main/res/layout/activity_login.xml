@@ -5,67 +5,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/wall1"
     android:padding="10dp"
+    android:gravity="center"
     tools:context=".LoginActivity">
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="아이디"
-        android:textSize="18sp"
-        android:textColor="#444444"
-        android:layout_marginBottom="5dp"/>
+        android:layout_height="80dp"
+        android:src="@drawable/atlas"
+        android:adjustViewBounds="true"
+        android:layout_marginBottom="30dp"/>
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
         android:id="@+id/edtID"
-        android:background="@drawable/editcustom"
+        android:background="@drawable/editspeicalcustom"
         android:hint="아이디를 입력해주십시오."
         android:textSize="18sp"
-        android:padding="10dp"
+        android:layout_gravity="center"
+        android:paddingLeft="25dp"
+        android:paddingRight="10dp"
+        android:layout_marginLeft="5dp"
         android:textColor="#000000"
-        android:layout_marginBottom="10dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="비밀번호"
-        android:textSize="18sp"
-        android:textColor="#444444"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="15dp"/>
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
         android:id="@+id/edtPassword"
-        android:background="@drawable/editcustom"
+        android:background="@drawable/editspeicalcustom"
         android:hint="비밀번호를 입력해주십시오."
-        android:inputType="textPassword"
         android:textSize="18sp"
-        android:padding="10dp"
+        android:layout_gravity="center"
+        android:inputType="textPassword"
+        android:paddingLeft="25dp"
+        android:paddingRight="10dp"
+        android:layout_marginLeft="5dp"
         android:textColor="#000000"
-        android:layout_marginBottom="30dp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="right">
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:id="@+id/btnSignup"
-            style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/buttonsubcustom"
-            android:text="회원가입"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:layout_marginRight="15dp"/>
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:id="@+id/btnLogin"
-            style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/buttonmaincustom"
-            android:textColor="#FFFFFF"
-            android:text="로그인"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
+        android:layout_marginBottom="50dp"/>
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:id="@+id/btnLogin"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/buttonspeicalcustom"
+        android:textColor="#FFFFFF"
+        android:text="로그인"
+        android:layout_marginLeft="5dp"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+    <Button
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:id="@+id/btnSignup"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/buttonsubspecialcustom"
+        android:text="회원가입"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000000"/>
 </LinearLayout>

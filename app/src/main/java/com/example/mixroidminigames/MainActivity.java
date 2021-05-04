@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity {
 
     private TextView txtID, txtEmail, txtLocation;
     private ImageView imgSetting;
+    private Button btnLogin;
 
     private long backKeyPressedTime = 0;
     private boolean isLogin = false;
@@ -84,6 +85,7 @@ public class MainActivity extends BaseActivity {
         txtEmail = view.findViewById(R.id.txtEmail);
         txtLocation = view.findViewById(R.id.txtLocation);
         imgSetting = view.findViewById(R.id.imgSetting);
+        btnLogin = view.findViewById(R.id.btnLogin);
 
         imgSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,10 +146,11 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(View v) {
                                 isLogin = false;
+                                btnLogin.setVisibility(View.VISIBLE);
+                                txtID.setVisibility(View.GONE);
                                 imgSetting.setVisibility(View.GONE);
                                 txtLocation.setVisibility(View.GONE);
                                 txtEmail.setVisibility(View.GONE);
-                                txtID.setText("로그인");
                                 saveProfile("null");
                                 toast("로그아웃되었습니다.");
                                 adm.alertDismiss();
@@ -183,10 +186,11 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(View v) {
                                 isLogin = false;
+                                btnLogin.setVisibility(View.VISIBLE);
+                                txtID.setVisibility(View.GONE);
                                 imgSetting.setVisibility(View.GONE);
                                 txtLocation.setVisibility(View.GONE);
                                 txtEmail.setVisibility(View.GONE);
-                                txtID.setText("로그인");
                                 memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -220,7 +224,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        txtID.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isLogin) {
@@ -252,14 +256,17 @@ public class MainActivity extends BaseActivity {
                         txtLocation.setText(location);
                         txtID.setText(loadProfile());
 
+                        btnLogin.setVisibility(View.GONE);
+                        txtID.setVisibility(View.VISIBLE);
                         imgSetting.setVisibility(View.VISIBLE);
                         txtLocation.setVisibility(View.VISIBLE);
                         txtEmail.setVisibility(View.VISIBLE);
                     } else {
+                        btnLogin.setVisibility(View.VISIBLE);
+                        txtID.setVisibility(View.GONE);
                         imgSetting.setVisibility(View.GONE);
                         txtLocation.setVisibility(View.GONE);
                         txtEmail.setVisibility(View.GONE);
-                        txtID.setText("로그인");
                     }
                 }
 
@@ -270,10 +277,11 @@ public class MainActivity extends BaseActivity {
             });
         } else {
             isLogin = false;
+            btnLogin.setVisibility(View.VISIBLE);
+            txtID.setVisibility(View.GONE);
             imgSetting.setVisibility(View.GONE);
             txtLocation.setVisibility(View.GONE);
             txtEmail.setVisibility(View.GONE);
-            txtID.setText("로그인");
         }
     }
 
@@ -289,6 +297,8 @@ public class MainActivity extends BaseActivity {
                     txtLocation.setText(member.getLocation());
                     txtEmail.setText(member.getEmail());
 
+                    btnLogin.setVisibility(View.GONE);
+                    txtID.setVisibility(View.VISIBLE);
                     imgSetting.setVisibility(View.VISIBLE);
                     txtLocation.setVisibility(View.VISIBLE);
                     txtEmail.setVisibility(View.VISIBLE);
