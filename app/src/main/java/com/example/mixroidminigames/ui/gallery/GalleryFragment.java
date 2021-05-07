@@ -18,6 +18,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.mixroidminigames.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
 
@@ -28,6 +37,15 @@ public class GalleryFragment extends Fragment {
     private TextView txtHouse, txtHouseMax;
     private ListView listView;
     private FloatingActionButton fabAdd;
+
+    private MilkAdapter milkAdapter;
+    private ArrayList<MilkHouse> milkHouses;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference memberRef;
+
+    private String[] week_name = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
+    private int position = 0;
+    private long max = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +70,9 @@ public class GalleryFragment extends Fragment {
             rdoWeek[i] = root.findViewById(resource);
         }
 
+        mDatabase = FirebaseDatabase.getInstance();
+        memberRef = mDatabase.getReference("Members/"+loadProfile());
+
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +81,97 @@ public class GalleryFragment extends Fragment {
             }
         });
 
+        rgWeek.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                onResume();
+            }
+        });
+
+        milkHouses = new ArrayList<MilkHouse>();
+        milkAdapter = new MilkAdapter(getActivity(), milkHouses, getActivity());
+        listView.setAdapter(milkAdapter);
+
         return root;
+    }
+
+    private int selectWeek() {
+        for (int i = 0; i < rdoWeek.length; i++) {
+            if (rdoWeek[i].isChecked()) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        milkHouses.clear();
+        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String week = week_name[selectWeek()];
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    if (data.getKey().equals(week)) {
+                        max = data.getChildrenCount();
+                        for (DataSnapshot data2 : data.getChildren()) {
+                            String name = "null", password = "null";
+                            int order = 0;
+                            ArrayList<Milk> milks = new ArrayList<Milk>();
+                            boolean isPassword = false, isDelivery = false;
+                            for (DataSnapshot data3 : data2.getChildren()) {
+                                if (data3.getKey().equals("name")) name = data3.getValue().toString();
+                                else if (data3.getKey().equals("order")) order = Integer.parseInt(data3.getValue().toString());
+                                else if (data3.getKey().equals("ispwd")) isPassword = Boolean.parseBoolean(data3.getValue().toString());
+                                else if (data3.getKey().equals("pwd")) password = data3.getValue().toString();
+                                else if (data3.getKey().equals("isdelivery")) isDelivery = Boolean.parseBoolean(data3.getValue().toString());
+                                else {
+                                    String type = "null";
+                                    int count = 0;
+                                    for (DataSnapshot data4 : data3.getChildren()) {
+                                        if (data4.getKey().equals("type")) type = data4.getValue().toString();
+                                        else if (data4.getKey().equals("count")) count = Integer.parseInt(data4.getValue().toString());
+                                    }
+                                    Milk milk = new Milk(type, count);
+                                    milks.add(milk);
+                                }
+                            }
+                            MilkHouse milkHouse = new MilkHouse(name, password, order, milks, isPassword, isDelivery);
+                            milkHouses.add(milkHouse);
+                        }
+                    }
+                }
+                milkAdapter.notifyDataSetChanged();
+                txtHouse.setText(Long.toString(max));
+                txtHouseMax.setText(Long.toString(max));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private String loadProfile() {
+        FileInputStream fis = null;
+        try {
+            fis = getActivity().openFileInput("id.txt");
+            byte[] memoData = new byte[fis.available()];
+            while(fis.read(memoData) != -1) {}
+            return new String(memoData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "null";
     }
 }

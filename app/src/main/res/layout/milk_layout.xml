@@ -5,11 +5,16 @@
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
     <TextView
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtType"
         android:text="Milk Type"
+        android:textSize="18sp"
+        android:textColor="#000000"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" : "
         android:textSize="18sp"
         android:textColor="#000000"/>
     <TextView

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -30,12 +31,13 @@ import java.util.Map;
 public class MilkAddActivity extends AppCompatActivity {
     private final int WEEK_COUNT = 7;
 
-    private EditText edtName;
+    private EditText edtName, edtPassword;
     private CheckBox[] chkWeek = new CheckBox[WEEK_COUNT];
     private EditText[] edtWeek = new EditText[WEEK_COUNT];
     private ImageButton[] btnWeek = new ImageButton[WEEK_COUNT];
     private LinearLayout[] layoutWeek = new LinearLayout[WEEK_COUNT];
-    private Button btnAdd;
+    private Button btnAdd, btnDouble;
+    private CheckBox chkPassword;
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference memberRef;
@@ -43,6 +45,7 @@ public class MilkAddActivity extends AppCompatActivity {
 
     private String[] week_name = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
     private int last_number = 0;
+    private boolean isDouble = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,17 @@ public class MilkAddActivity extends AppCompatActivity {
 
         edtName = findViewById(R.id.edtName);
         btnAdd = findViewById(R.id.btnAdd);
+        btnDouble = findViewById(R.id.btnDouble);
+        chkPassword = findViewById(R.id.chkPassword);
+        edtPassword = findViewById(R.id.edtPassword);
+
+        chkPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) edtPassword.setVisibility(View.VISIBLE);
+                else edtPassword.setVisibility(View.GONE);
+            }
+        });
 
         for (int i = 0; i < WEEK_COUNT; i++) {
             int resource = getResources().getIdentifier("chkWeek"+(i+1), "id", getPackageName());
@@ -94,6 +108,7 @@ public class MilkAddActivity extends AppCompatActivity {
                     }
                     int count = Integer.parseInt(edtWeek[index].getText().toString());
 
+                    layoutWeek[index].removeAllViews();
                     for (int i = 0; i < count; i++) {
                         View view = getLayoutInflater().inflate(R.layout.week_add_layout, null);
 
@@ -120,17 +135,67 @@ public class MilkAddActivity extends AppCompatActivity {
             });
         }
 
+        btnDouble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            for (int i = 0; i < WEEK_COUNT; i++) {
+                                if (data.getKey().equals(week_name[i])) {
+                                    for (DataSnapshot data2 : data.getChildren()) {
+                                        for (DataSnapshot data3 : data2.getChildren()) {
+                                            if (data3.getKey().equals("name")) {
+                                                if (data3.getValue().toString().equals(edtName.getText().toString())) {
+                                                    toast("이미 존재한 배달지입니다.");
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        toast("등록 가능한 배달지입니다.");
+                        edtName.setEnabled(false);
+                        btnDouble.setEnabled(false);
+                        isDouble = false;
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (edtName.getText().toString().equals("")) {
                     toast("주소가 비었습니다. 입력 후 다시 시도해주시기 바랍니다.");
                     return;
+                } else if (isDouble) {
+                    toast("중복 체크를 하십시오.");
+                    return;
+                } else if (isNotCheckedNothing()) {
+                    toast("배달 요일을 선택하지 않았습니다.");
+                    return;
+                } else if (chkPassword.isChecked() && edtPassword.getText().toString().equals("")) {
+                    toast("비밀번호가 비어있습니다.");
+                    return;
                 }
                 String name = edtName.getText().toString();
                 for (int i = 0; i < WEEK_COUNT; i++) {
                     if (chkWeek[i].isChecked()) {
                         memberRef.child(week_name[i]).child("house"+(last_number+1)).child("name").setValue(name);
+                        memberRef.child(week_name[i]).child("house"+(last_number+1)).child("order").setValue(last_number+1);
+                        memberRef.child(week_name[i]).child("house"+(last_number+1)).child("ispwd").setValue(chkPassword.isChecked());
+                        memberRef.child(week_name[i]).child("house"+(last_number+1)).child("isdelivery").setValue(false);
+                        if (chkPassword.isChecked()) memberRef.child(week_name[i]).child("house"+(last_number+1)).child("pwd").setValue(edtPassword.getText().toString());
+                        else memberRef.child(week_name[i]).child("house"+(last_number+1)).child("pwd").setValue("null");
                         for (int j = 0; j < arrayMilk[i].size(); j++) {
                             memberRef.child(week_name[i]).child("house"+(last_number+1)).child("milk"+(j+1)).setValue(arrayMilk[i].get(j));
                         }
@@ -145,6 +210,13 @@ public class MilkAddActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean isNotCheckedNothing() {
+        for (int i = 0; i < chkWeek.length; i++) {
+            if (chkWeek[i].isChecked()) return false;
+        }
+        return true;
     }
 
     private void toast(String message) {

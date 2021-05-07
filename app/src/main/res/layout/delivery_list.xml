@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@drawable/listcustom"
-    android:paddingBottom="10dp" android:paddingRight="5dp">
+    android:paddingBottom="10dp" android:paddingRight="5dp"
+    android:layout_marginTop="10dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,71 +20,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/layoutPassword"
+        android:visibility="gone"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtWeek1"
-            android:text="월"
+            android:text="비밀번호 : "
             android:textSize="18sp"
-            android:gravity="center"
             android:textColor="#888888"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtWeek2"
-            android:text="화"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:textColor="#888888"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtWeek3"
-            android:text="수"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:textColor="#888888"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtWeek4"
-            android:text="목"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:textColor="#888888"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtWeek5"
-            android:text="금"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:textColor="#888888"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtWeek6"
-            android:text="토"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:textColor="#888888"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtWeek7"
-            android:text="일"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:textColor="#888888"/>
+            android:id="@+id/txtPassword"
+            android:textColor="#000000"
+            android:text="Password"
+            android:textSize="18sp"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
