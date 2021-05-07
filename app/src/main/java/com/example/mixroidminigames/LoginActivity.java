@@ -69,7 +69,8 @@ public class LoginActivity extends BaseActivity {
                                     String pwd = data.child("pwd").getValue().toString();
                                     String location = data.child("location").getValue().toString();
                                     String email = data.child("email").getValue().toString();
-                                    Member member = new Member(id, pwd, location, email);
+                                    int count = Integer.parseInt(data.child("count").getValue().toString());
+                                    Member member = new Member(id, pwd, location, email, count);
                                     message = id+"님 환영합니다.";
                                     Intent intent = new Intent();
                                     intent.putExtra("logined_member", member);

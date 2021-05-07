@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 public class Member implements Serializable  {
     private String id, pwd, location, email;
+    private int count;
 
-    public Member(String id, String pwd, String location, String email) {
+    public Member(String id, String pwd, String location, String email, int count) {
         this.id = id;
         this.pwd = pwd;
         this.location = location;
         this.email = email;
+        this.count = count;
     }
 
     public String getId() {
@@ -42,5 +44,13 @@ public class Member implements Serializable  {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

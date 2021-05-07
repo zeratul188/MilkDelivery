@@ -1,4 +1,4 @@
-package com.example.mixroidminigames.ui;
+package com.example.mixroidminigames;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

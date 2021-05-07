@@ -87,7 +87,7 @@ public class SignupActivity extends BaseActivity {
                     toast("비밀번호가 동일하지 않습니다.");
                     return;
                 }
-                Member member = new Member(edtID.getText().toString(), edtPassword.getText().toString(), edtLocation.getText().toString(), edtEmail.getText().toString());
+                Member member = new Member(edtID.getText().toString(), edtPassword.getText().toString(), edtLocation.getText().toString(), edtEmail.getText().toString(), 0);
                 memberRef.child(edtID.getText().toString()).setValue(member);
                 toast(edtID.getText().toString()+"님, 회원가입에 성공하였습니다.");
                 finish();
