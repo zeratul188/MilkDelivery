@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -52,7 +54,7 @@ public class GalleryFragment extends Fragment {
     private DatabaseReference memberRef;
 
     private String[] week_name = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
-    private int position = 0;
+    private int position = 0, pick = 0;
     private long max = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -95,6 +97,89 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 onResume();
+            }
+        });
+
+        btnList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pick = 1;
+                final AlertDialogMethods adm = new AlertDialogMethods(getActivity());
+                View view = getLayoutInflater().inflate(R.layout.listdialog, null);
+
+                final ArrayList<MilkPosition> milkPositions = new ArrayList<MilkPosition>();
+
+                final TextView txtCount = view.findViewById(R.id.txtCount);
+                ListView listMilk = view.findViewById(R.id.listMilk);
+                Button btnCancel = view.findViewById(R.id.btnCancel);
+                Button btnOK = view.findViewById(R.id.btnOK);
+
+                final ArrayList<String> deliverys = new ArrayList<String>();
+                for (int i = 0; i < milkHouses.size(); i++) {
+                    deliverys.add(milkHouses.get(i).getName());
+                }
+
+                txtCount.setText(Integer.toString(pick));
+
+                final ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, deliverys);
+                listMilk.setAdapter(adapter);
+
+                listMilk.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        MilkPosition mp = new MilkPosition(deliverys.get(position), pick);
+                        milkPositions.add(mp);
+                        pick++;
+                        deliverys.remove(position);
+                        if (!deliverys.isEmpty()) txtCount.setText(Integer.toString(pick));
+                        else txtCount.setText("END");
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                btnOK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!deliverys.isEmpty()) {
+                            toast("모든 배달지의 순서를 정하지 않았습니다.");
+                            return;
+                        }
+                        final DatabaseReference milkRef = mDatabase.getReference("Members/"+loadProfile()+"/"+getWeek());
+                        milkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (int i = 0; i < milkPositions.size(); i++) {
+                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                        String key = data.getKey();
+                                        if (data.child("name").getValue().toString().equals(milkPositions.get(i).getName())) {
+                                            Map<String, Object> taskMap = new HashMap<String, Object>();
+                                            taskMap.put("order", milkPositions.get(i).getLocation());
+                                            milkRef.child(key).updateChildren(taskMap);
+                                        }
+                                    }
+                                }
+                                toast("순서를 변경하였습니다.");
+                                onResume();
+                                adm.alertDismiss();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adm.alertDismiss();
+                    }
+                });
+
+                adm.setView(view);
+                adm.showDialog(false);
             }
         });
 
