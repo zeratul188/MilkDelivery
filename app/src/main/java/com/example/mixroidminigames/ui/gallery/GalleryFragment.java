@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.mixroidminigames.AlertDialogMethods;
 import com.example.mixroidminigames.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GalleryFragment extends Fragment {
 
@@ -37,6 +44,7 @@ public class GalleryFragment extends Fragment {
     private TextView txtHouse, txtHouseMax;
     private ListView listView;
     private FloatingActionButton fabAdd;
+    private ImageButton btnReset, btnList;
 
     private MilkAdapter milkAdapter;
     private ArrayList<MilkHouse> milkHouses;
@@ -65,6 +73,8 @@ public class GalleryFragment extends Fragment {
         txtHouseMax = root.findViewById(R.id.txtHouseMax);
         listView = root.findViewById(R.id.listView);
         fabAdd = root.findViewById(R.id.fabAdd);
+        btnList = root.findViewById(R.id.btnList);
+        btnReset = root.findViewById(R.id.btnReset);
         for (int i = 0; i < rdoWeek.length; i++) {
             int resource = getActivity().getResources().getIdentifier("rdoWeek"+(i+1), "id", getActivity().getPackageName());
             rdoWeek[i] = root.findViewById(resource);
@@ -88,11 +98,79 @@ public class GalleryFragment extends Fragment {
             }
         });
 
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatabaseReference milkRef = mDatabase.getReference("Members/"+loadProfile()+"/"+getWeek());
+                final AlertDialogMethods adm = new AlertDialogMethods(getActivity());
+                View view = getLayoutInflater().inflate(R.layout.answerdialog, null);
+
+                TextView txtView = view.findViewById(R.id.txtView);
+                Button btnCancel = view.findViewById(R.id.btnCancel);
+                Button btnOK = view.findViewById(R.id.btnOK);
+
+                txtView.setText("모두 초기화하시겠습니까?");
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adm.alertDismiss();
+                    }
+                });
+
+                btnOK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        milkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                String key = "null";
+                                for (DataSnapshot data : snapshot.getChildren()) {
+                                    for (DataSnapshot data2 : data.getChildren()) {
+                                        if (data2.getKey().equals("isdelivery")) {
+                                            key = data.getKey();
+                                            Map<String, Object> taskMap = new HashMap<String, Object>();
+                                            taskMap.put("isdelivery", false);
+                                            milkRef.child(key).updateChildren(taskMap);
+                                        }
+                                    }
+                                }
+                                onResume();
+                                toast("모두 초기화하였습니다.");
+                                adm.alertDismiss();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
+
+                adm.setView(view);
+                adm.showDialog(false);
+            }
+        });
+
         milkHouses = new ArrayList<MilkHouse>();
         milkAdapter = new MilkAdapter(getActivity(), milkHouses, getActivity());
         listView.setAdapter(milkAdapter);
 
         return root;
+    }
+
+    private void toast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private String getWeek() {
+        for (int i = 0; i < rdoWeek.length; i++) {
+            if (rdoWeek[i].isChecked()) {
+                return week_name[i];
+            }
+        }
+        return "null";
     }
 
     private int selectWeek() {
@@ -108,10 +186,13 @@ public class GalleryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         milkHouses.clear();
+        max = 0;
+        milkAdapter.setReference(getWeek(), loadProfile());
         memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String week = week_name[selectWeek()];
+                int cnt = 0;
                 for (DataSnapshot data : snapshot.getChildren()) {
                     if (data.getKey().equals(week)) {
                         max = data.getChildrenCount();
@@ -138,12 +219,16 @@ public class GalleryFragment extends Fragment {
                                 }
                             }
                             MilkHouse milkHouse = new MilkHouse(name, password, order, milks, isPassword, isDelivery);
-                            milkHouses.add(milkHouse);
+                            if (!isDelivery) {
+                                cnt++;
+                                milkHouses.add(milkHouse);
+                            }
                         }
                     }
                 }
+                Collections.sort(milkHouses);
                 milkAdapter.notifyDataSetChanged();
-                txtHouse.setText(Long.toString(max));
+                txtHouse.setText(Long.toString(cnt));
                 txtHouseMax.setText(Long.toString(max));
             }
 
