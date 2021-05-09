@@ -119,6 +119,10 @@ public class MilkAddActivity extends AppCompatActivity {
                         btnCommit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (edtType.getText().toString().equals("") || edtCount.getText().toString().equals("")) {
+                                    toast("우유 입력 값이 비어있습니다.");
+                                    return;
+                                }
                                 String type = edtType.getText().toString();
                                 int count = Integer.parseInt(edtCount.getText().toString());
                                 Milk milk = new Milk(type, count);

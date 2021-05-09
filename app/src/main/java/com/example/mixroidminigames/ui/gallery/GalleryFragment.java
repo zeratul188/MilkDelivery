@@ -240,6 +240,7 @@ public class GalleryFragment extends Fragment {
 
         milkHouses = new ArrayList<MilkHouse>();
         milkAdapter = new MilkAdapter(getActivity(), milkHouses, getActivity());
+        milkAdapter.setTxtHouse(txtHouse);
         listView.setAdapter(milkAdapter);
 
         return root;
@@ -270,12 +271,12 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        milkHouses.clear();
         max = 0;
         milkAdapter.setReference(getWeek(), loadProfile());
         memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                milkHouses.clear();
                 String week = week_name[selectWeek()];
                 int cnt = 0;
                 for (DataSnapshot data : snapshot.getChildren()) {

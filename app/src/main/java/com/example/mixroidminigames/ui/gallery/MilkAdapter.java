@@ -2,7 +2,9 @@ package com.example.mixroidminigames.ui.gallery;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -22,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +35,9 @@ public class MilkAdapter extends BaseAdapter {
     private Activity activity;
     private FirebaseDatabase mDatabase;
     private DatabaseReference milkRef;
+    private TextView txtHouse = null;
+
+    private String week = "null", path = "null";
 
     public MilkAdapter(Context context, ArrayList<MilkHouse> milkHouses, Activity activity) {
         this.context = context;
@@ -42,6 +48,12 @@ public class MilkAdapter extends BaseAdapter {
 
     public void setReference(String week, String profile) {
         milkRef = mDatabase.getReference("Members/"+profile+"/"+week);
+        this.week = week;
+        path = "Members/"+profile+"/"+week;
+    }
+
+    public void setTxtHouse(TextView txtHouse) {
+        this.txtHouse = txtHouse;
     }
 
     @Override
@@ -60,7 +72,7 @@ public class MilkAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) convertView = View.inflate(context, R.layout.delivery_list, null);
 
         final TextView txtName = convertView.findViewById(R.id.txtName);
@@ -127,6 +139,9 @@ public class MilkAdapter extends BaseAdapter {
                                                 milkRef.child(key).updateChildren(taskMap);
                                                 toast("\""+milkHouses.get(index).getName()+"\" 배달 완료하였습니다.");
                                                 milkHouses.remove(index);
+                                                int house = Integer.parseInt(txtHouse.getText().toString());
+                                                if (house > 0) house--;
+                                                if (txtHouse != null) txtHouse.setText(Integer.toString(house));
                                                 notifyDataSetChanged();
                                                 adm.alertDismiss();
                                                 return;
@@ -152,7 +167,13 @@ public class MilkAdapter extends BaseAdapter {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialogMethods adm = new AlertDialogMethods(context);
+                Intent intent = new Intent(context, MilkEditActivity.class);
+                intent.putExtra("name", milkHouses.get(position).getName());
+                intent.putExtra("path", path);
+                intent.putExtra("week", week);
+                context.startActivity(intent);
+
+                /*final AlertDialogMethods adm = new AlertDialogMethods(context);
                 View view = activity.getLayoutInflater().inflate(R.layout.answerdialog, null);
 
                 TextView txtView = view.findViewById(R.id.txtView);
@@ -183,6 +204,9 @@ public class MilkAdapter extends BaseAdapter {
                                                 milkRef.child(key).removeValue();
                                                 toast("\""+milkHouses.get(index).getName()+"\"를 삭제하였습니다.");
                                                 milkHouses.remove(index);
+                                                int house = Integer.parseInt(txtHouse.getText().toString());
+                                                if (house > 0) house--;
+                                                if (txtHouse != null) txtHouse.setText(Integer.toString(house));
                                                 notifyDataSetChanged();
                                                 adm.alertDismiss();
                                                 return;
@@ -201,7 +225,7 @@ public class MilkAdapter extends BaseAdapter {
                 });
 
                 adm.setView(view);
-                adm.showDialog(false);
+                adm.showDialog(false);*/
             }
         });
 
