@@ -30,7 +30,7 @@
             <item> <shape> <padding android:top="0dp" android:right="1dp" android:bottom="2dp" android:left="0dp" /> <corners android:radius="100dp" /> <solid android:color="#30222222" /> </shape> </item>
             <item> <shape> <padding android:top="0dp" android:right="1dp" android:bottom="2dp" android:left="0dp" /> <corners android:radius="100dp" /> <solid android:color="#50222222" /> </shape> </item>
             <!-- Background -->
-            <item> <shape> <solid android:color="#771A1A" /> <corners android:radius="100dp" /> </shape> </item>
+            <item> <shape> <solid android:color="#D33A3A" /> <corners android:radius="100dp" /> </shape> </item>
         </layer-list>
     </item>
 </selector>

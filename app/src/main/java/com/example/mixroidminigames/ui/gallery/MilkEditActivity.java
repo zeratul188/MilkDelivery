@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mixroidminigames.AlertDialogMethods;
+import com.example.mixroidminigames.BaseActivity;
 import com.example.mixroidminigames.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MilkEditActivity extends AppCompatActivity {
+public class MilkEditActivity extends BaseActivity {
     private EditText edtPassword;
     private Button btnDelete, btnEdit;
     private CheckBox chkPassword;

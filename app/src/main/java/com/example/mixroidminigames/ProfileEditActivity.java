@@ -32,7 +32,7 @@ public class ProfileEditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(loadProfile()+"님의 정보");
 
         edtEmail = findViewById(R.id.edtEmail);

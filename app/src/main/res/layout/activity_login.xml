@@ -5,16 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/wall1"
+    android:background="#632121"
     android:padding="10dp"
     android:gravity="center"
     tools:context=".LoginActivity">
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:src="@drawable/atlas"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/milk_icon"
         android:adjustViewBounds="true"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그인"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="40dp"/>
     <EditText
         android:layout_width="300dp"
         android:layout_height="60dp"

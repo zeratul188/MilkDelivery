@@ -24,7 +24,7 @@
     <item android:state_pressed="false">
         <shape>
             <padding android:bottom="4dp" android:left="8dp" android:right="8dp" android:top="4dp" />
-            <solid android:color="#80FFFFFF" />
+            <solid android:color="#30FFFFFF" />
             <corners android:radius="5dp"/>
             <stroke
                 android:width="2dp"

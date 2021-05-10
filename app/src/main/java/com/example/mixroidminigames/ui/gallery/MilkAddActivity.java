@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.mixroidminigames.BaseActivity;
 import com.example.mixroidminigames.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MilkAddActivity extends AppCompatActivity {
+public class MilkAddActivity extends BaseActivity {
     private final int WEEK_COUNT = 7;
 
     private EditText edtName, edtPassword;
