@@ -34,7 +34,7 @@ public class PasswordEditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_edit);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("비밀번호 변경");
 
         edtUndoPassword = findViewById(R.id.edtUndoPassword);

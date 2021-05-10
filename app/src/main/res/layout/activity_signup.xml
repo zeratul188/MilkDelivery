@@ -49,7 +49,7 @@
             android:text="중복체크"
             android:textSize="18sp"
             android:layout_marginLeft="10dp"
-            android:textColor="#000000"/>
+            android:textColor="#FFFFFF"/>
     </LinearLayout>
     <EditText
         android:layout_width="300dp"
