@@ -44,6 +44,8 @@ public class HomeFragment extends Fragment {
     private FirebaseDatabase mDatabase;
     private DatabaseReference memberRef;
     private ArrayAdapter adapter;
+    private ArrayList<MilkList> milkLists;
+    private MilkListAdapter milkListAdapter;
 
     private String now_date;
     private String[] week_name = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
@@ -84,6 +86,10 @@ public class HomeFragment extends Fragment {
         week = week_name[nextDay(cal.get(Calendar.DAY_OF_WEEK))-1];
         memberRef = mDatabase.getReference("Members/"+loadProfile()+"/"+week);
 
+        milkLists = new ArrayList<MilkList>();
+        milkListAdapter = new MilkListAdapter(getActivity(), milkLists);
+        listType.setAdapter(milkListAdapter);
+
         return root;
     }
 
@@ -120,6 +126,55 @@ public class HomeFragment extends Fragment {
                 } else {
                     listMilk.setVisibility(View.VISIBLE);
                     txtNextMilkInfo.setVisibility(View.GONE);
+                }
+
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    for (DataSnapshot data2 : data.getChildren()) {
+                        switch (data2.getKey()) {
+                            case "isdelivery":
+                            case "ispwd":
+                            case "name":
+                            case "order":
+                            case "pwd":
+                                break;
+                            default:
+                                String type = "null";
+                                int count = 0;
+                                for (DataSnapshot data3 : data2.getChildren()) {
+                                    switch (data3.getKey()) {
+                                        case "type":
+                                            type = data3.getValue().toString();
+                                            break;
+                                        case "count":
+                                            count = Integer.parseInt(data3.getValue().toString());
+                                            break;
+                                    }
+                                }
+                                if (!type.equals("null")) {
+                                    boolean isFind = false;
+                                    for (int i = 0; i < milkLists.size(); i++) {
+                                        if (milkLists.get(i).getType().equals(type)) {
+                                            int temp_cnt = milkLists.get(i).getCount();
+                                            temp_cnt++;
+                                            milkLists.get(i).setCount(temp_cnt);
+                                            isFind = true;
+                                        }
+                                    }
+                                    if (!isFind) {
+                                        MilkList ml = new MilkList(type, count);
+                                        milkLists.add(ml);
+                                    }
+                                }
+                        }
+                    }
+                }
+                milkListAdapter.notifyDataSetChanged();
+                if (milkLists.isEmpty()) {
+                    listType.setVisibility(View.GONE);
+                    txtNextTypeInfo.setVisibility(View.VISIBLE);
+                } else {
+                    listType.setVisibility(View.VISIBLE);
+                    txtNextTypeInfo.setVisibility(View.GONE);
                 }
             }
 
